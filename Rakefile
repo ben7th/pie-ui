@@ -8,7 +8,7 @@ Echoe.new('pie-ui', '0.1.0') do |p|
   p.url            = "http://github.com/ben7th/pie-ui"
   p.author         = "ben7th"
   p.email          = "ben7th@sina.com"
-  p.ignore_pattern = ["tmp/*", "script/*"]
+  p.ignore_pattern = ["tmp/*", "script/*", "nbproject/**/*.*"]
   p.development_dependencies = []
 end
 
