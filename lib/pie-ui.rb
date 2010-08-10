@@ -2,8 +2,10 @@ module PieUi
   class << self
     def enable_actionpack
       require 'pie-ui/convention'
-      require 'pie-ui/mplist_helpers'
-      ActionView::Base.send :include, MplistHelpers
+      require 'pie-ui/mplist_helper'
+      require 'pie-ui/xml_format_helper'
+      ActionView::Base.send :include, MplistHelper
+      ActionView::Base.send :include, XmlFormatHelper
     end
   end
 end
