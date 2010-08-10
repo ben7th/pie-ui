@@ -61,5 +61,25 @@ module PieUi
     end
     
   end
+
+  module MplistPartialMethods
+    # 根据 ActiveRecord 模型 获取对应的模板基准名
+    def get_partial_base_name_of_model(model)
+      underscore_class_name_of(model).demodulize
+    end
+
+    # 根据 ActiveRecord 模型 获取带有目录信息的模板名
+    def get_partial_name_of_model(model)
+      "#{underscore_class_name_of(model).pluralize}/mpinfo_#{get_partial_base_name_of_model(model)}"
+    end
+
+    def underscore_class_name_of(model)
+      model.class.name.underscore
+    end
+
+    def get_sym_of(model)
+      get_partial_base_name_of_model(model).to_sym
+    end
+  end
   
 end

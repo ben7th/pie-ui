@@ -11,26 +11,43 @@ module PieUi
 
     def _mplist_block_given(collection,&block)
       collection.each do |member|
-        capture = capture(member, &block).sub(/\n$/,'') # 去掉末尾的 \n 的目的是为了输出代码的整齐
+        capture_str = capture(member, &block)
         case member
           when ActiveRecord::Base
-            _active_record_li(member,capture)
+            _active_record_li(member,capture_str)
           else
-            _common_object_li(member,capture)
+            _common_object_li(member,capture_str)
         end
       end
     end
+
+    def _mplist_no_block(collection,config)
+      collection.each do |member|
+        if member.nil?
+          concat '<li class="nilitem">nil item error</li>'
+          next
+        end
+
+        capture_str = (render config.partial_configs_of(member))
+        _active_record_li(member,capture_str)
+      end
+    end
     
-    def _active_record_li(member,capture)
+    def _active_record_li(member,capture_str)
       concat(content_tag_for(:li, member, :class=>li_classname) {
-        capture
+        _fix_capture_tail_format(capture_str)
       })
     end
 
-    def _common_object_li(member,capture)
+    def _common_object_li(member,capture_str)
       concat("<li id='#{_build_object_html_id member}' class='#{li_classname}'>")
-      concat(capture)
+      concat(_fix_capture_tail_format(capture_str))
       concat("</li>")
+    end
+
+    # 去掉末尾的 \n 的目的是为了输出代码的整齐
+    def _fix_capture_tail_format(capture_str)
+      capture_str.sub(/\n$/,'') 
     end
 
     def li_classname
@@ -45,6 +62,7 @@ module PieUi
 
   class MplistConfig
     include PieUi::Convention
+    include PieUi::MplistPartialMethods
 
     attr_reader :options
 
@@ -66,6 +84,26 @@ module PieUi
 
     def html_dom_id
       @html_dom_id ||= "mplist_#{options[:id] || build_ul_id(options[:for]) || randstr}"
+    end
+
+    def partial_locals
+      @partial_locals ||= (options[:locals] || {})
+    end
+
+    def partial_locals_of(model)
+      {get_sym_of(model)=>model}.merge(partial_locals)
+    end
+
+    def partial
+      @partial ||= options[:partial]
+    end
+
+    def partial_of(model)
+      partial || get_partial_name_of_model(model)
+    end
+
+    def partial_configs_of(model)
+      {:partial=>partial_of(model),:locals=>partial_locals_of(model)}
     end
   end
 end
