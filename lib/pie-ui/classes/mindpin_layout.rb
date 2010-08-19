@@ -8,19 +8,17 @@ class MindpinLayout
 
   module ControllerFilter
     def self.included(base)   
-      base.before_filter :init_layout
-      base.before_filter :enable_base_layout
-
       base.send(:include,InstanceMethods)
+      
+      base.before_filter :init_layout
+      base.layout base_layout_path('application.haml')
+
     end
 
     module InstanceMethods
       def init_layout
         @mindpin_layout = MindpinLayout.new
-      end
-
-      def enable_base_layout
-        render :layout=>base_layout_path('application.haml')
+        return true
       end
     end
   end

@@ -30,6 +30,10 @@ module PieUi
 end
 
 if defined? Rails
+  def base_layout_path(filename)
+    "#{File.dirname(__FILE__)}/pie-ui/base_layout/#{filename}"
+  end
+  
   PieUi.enable_classes
 
   PieUi.enable_actionpack if defined? ActionController
@@ -42,8 +46,11 @@ if defined? Rails
     Rails.env == 'development'
   end
 
-  def base_layout_path(filename)
-    "#{File.dirname(__FILE__)}/pie-ui/base_layout/#{filename}"
-  end
+
+  require "haml"
+  require 'coderay'
+  require 'haml-coderay'
+  
+  Haml::Filters::CodeRay.encoder_options = {:css=>:class}
   
 end
