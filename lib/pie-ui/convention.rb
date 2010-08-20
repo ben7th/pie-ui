@@ -70,7 +70,11 @@ module PieUi
 
     # 根据 ActiveRecord 模型 获取带有目录信息的模板名
     def get_partial_name_of_model(model)
-      "#{underscore_class_name_of(model).pluralize}/mpinfo_#{get_partial_base_name_of_model(model)}"
+      get_partial_name_of_model_with_prefix(:mpinfo,model)
+    end
+
+    def get_partial_name_of_model_with_prefix(prefix,model)
+      "#{underscore_class_name_of(model).pluralize}/parts/#{prefix}_#{get_partial_base_name_of_model(model)}"
     end
 
     def underscore_class_name_of(model)

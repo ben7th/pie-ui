@@ -26,6 +26,21 @@ module PieUi
 
       ActionController::Base.send :include, MindpinLayout::ControllerFilter
     end
+
+    def enable_ui_render
+      require 'pie-ui/ui_render/controller_methods'
+      require 'pie-ui/ui_render/fbox_module'
+      require 'pie-ui/ui_render/mindpin_ui_render'
+      
+      ActionController::Base.send :include, ControllerMethods
+    end
+
+    def enable_form_builder
+      require 'pie-ui/form_builder/mindpin_form_builder'
+      require 'pie-ui/form_builder/form_helper'
+
+      ActionView::Base.send :include, FormHelper
+    end
   end
 end
 
@@ -35,8 +50,9 @@ if defined? Rails
   end
   
   PieUi.enable_classes
-
   PieUi.enable_actionpack if defined? ActionController
+  PieUi.enable_ui_render if defined? ActionController
+  PieUi.enable_form_builder if defined? ActionController
 
   def Rails.production?
     Rails.env == 'production'
