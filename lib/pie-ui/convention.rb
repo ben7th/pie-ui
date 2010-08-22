@@ -27,6 +27,9 @@ module PieUi
     # 如果是数组，组装每个部分并用 _ 连接
     def build_ul_id(ul_for)
       case ul_for
+        when ActiveRecord::Base
+          # ui.mplist 会用到这个情况
+          build_ul_id_part(ul_for.class)
         when Class
           # Apple
           build_ul_id_part(ul_for)
@@ -84,6 +87,22 @@ module PieUi
     def get_sym_of(model)
       get_partial_base_name_of_model(model).to_sym
     end
+
+    def _render_partial(extra)
+      case extra[:partial]
+      when String
+        partial_name = extra[:partial]
+        locals = extra[:locals] || {}
+        render :partial=>partial_name,:locals=>{}.merge(locals)
+      when Array
+        prefix = extra[:partial][0]
+        model = extra[:partial][1]
+        partial_name = get_partial_name_of_model_with_prefix(prefix,model)
+        locals = extra[:locals] || {}
+        render :partial=>partial_name,:locals=>{get_sym_of(model)=>model}.merge(locals)
+      end
+    end
+
   end
   
 end

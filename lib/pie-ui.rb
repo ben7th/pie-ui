@@ -30,6 +30,7 @@ module PieUi
     def enable_ui_render
       require 'pie-ui/ui_render/controller_methods'
       require 'pie-ui/ui_render/fbox_module'
+      require 'pie-ui/ui_render/mplist_module'
       require 'pie-ui/ui_render/mindpin_ui_render'
       
       ActionController::Base.send :include, ControllerMethods

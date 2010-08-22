@@ -31,8 +31,8 @@ module ActionController
       if @ui_scope_generator.blank?
         render_without_ui_scope_generator(options, extra_options, &block)
       else
-        render_without_ui_scope_generator :update do |p|
-          p << @ui_scope_generator*"\n"
+        render_without_ui_scope_generator :update do |part|
+          part << @ui_scope_generator*"\n"
         end
       end
     end

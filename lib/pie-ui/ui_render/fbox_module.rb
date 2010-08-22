@@ -31,21 +31,6 @@ module PieUi
       title.blank? ? "":"<h3 class='f_box'>#{title}</h3>"
     end
 
-    def _render_partial(extra)
-      case extra[:partial]
-      when String
-        partial_name = extra[:partial]
-        locals = extra[:locals] || {}
-        render :partial=>partial_name,:locals=>{}.merge(locals)
-      when Array
-        prefix = extra[:partial][0]
-        model = extra[:partial][1]
-        partial_name = get_partial_name_of_model_with_prefix(prefix,model)
-        locals = extra[:locals] || {}
-        render :partial=>partial_name,:locals=>{get_sym_of(model)=>model}.merge(locals)
-      end
-    end
-
     def _call_show_fbox(string)
       json = string.to_json
       %~
