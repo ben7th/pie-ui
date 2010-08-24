@@ -9,19 +9,19 @@ module PieUi
     def enable_actionpack
       require 'pie-ui/convention'
 
-      require 'pie-ui/mplist_helper'
+      require 'pie-ui/helpers/mplist_helper'
       ActionView::Base.send :include, MplistHelper
 
-      require 'pie-ui/xml_format_helper'
+      require 'pie-ui/helpers/xml_format_helper'
       ActionView::Base.send :include, XmlFormatHelper
 
-      require 'pie-ui/bundle_helper'
+      require 'pie-ui/helpers/bundle_helper'
       ActionView::Base.send :include, BundleHelper
 
-      require 'pie-ui/mindpin_layout_helper'
+      require 'pie-ui/helpers/mindpin_layout_helper'
       ActionView::Base.send :include, MindpinLayoutHelper
 
-      require 'pie-ui/logo_helper'
+      require 'pie-ui/helpers/logo_helper'
       ActionView::Base.send :include, LogoHelper
 
       ActionController::Base.send :include, MindpinLayout::ControllerFilter
@@ -71,3 +71,6 @@ if defined? Rails
   Haml::Filters::CodeRay.encoder_options = {:css=>:class}
   
 end
+
+require 'pie-ui/global_util'
+include GlobalUtil

@@ -31,8 +31,9 @@ module PieUi
       ul_pattern = _get_ul_pattern(selector)
 
       prev_li_pattern = _get_li_pattern(extra[:prev])
-      str = context.content_tag_for :li,model,:class=>'mli' do
-        _get_partial_str(:info,model,extra)
+
+      str = context.content_tag_for :li, model, :class=>'mli' do
+        _get_partial_str(:mpinfo, model, extra)
       end
 
       %`
@@ -54,7 +55,7 @@ module PieUi
     def _build_update_mplist_js(selector,extra)
       model = _get_model(selector)
       li_pattern = _get_li_pattern(selector)
-      str = _get_partial_str(:info,model,extra)
+      str = _get_partial_str(:mpinfo,model,extra)
       %`
         $$(#{li_pattern.to_json}).each(function(li){
           pie.mplist.update_li(li,#{str.to_json});
@@ -88,6 +89,8 @@ module PieUi
           "#mplist_#{build_ul_id selector}"
         when Hash
           selector[:ul]
+        else
+          "#mplist_#{build_ul_id selector}"
       end
     end
 
@@ -99,8 +102,10 @@ module PieUi
           "##{dom_id selector.last}"
         when Hash
           selector[:li]
+        when nil
+          nil
         else
-          selector
+          "##{_object_html_id(selector)}"
       end
     end
 
@@ -112,12 +117,17 @@ module PieUi
           selector.last
         when Hash
           selector[:model]
+        else
+          selector
       end
     end
 
-    def _get_partial_str(prefix,extra)
-      
-      _render_partial(extra)
+    def _get_partial_str(prefix,model,extra)
+      if extra[:partial]
+        _render_partial(extra)
+      else
+        _render_partial(:partial=>[prefix,model],:locals=>extra[:locals])
+      end
     end
     
   end

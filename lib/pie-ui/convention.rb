@@ -1,5 +1,4 @@
 module PieUi
-
   module Convention
     include ActionController::RecordIdentifier
 
@@ -35,8 +34,19 @@ module PieUi
           build_ul_id_part(ul_for)
         when Array
           # [<Apple id:33>, Foo::Bar]
-          ul_for.map{|x| build_ul_id_part(x)}*'_'
+          _prepare_array(ul_for).map{|x| build_ul_id_part(x)}*'_'
+        else
+          build_ul_id_part(ul_for.class)
       end
+    end
+
+    def _prepare_array(array)
+      arr1 = array.clone
+      if(!arr1.last.is_a? Class)
+        last = arr1.pop
+        arr1<<last.class
+      end
+      arr1
     end
 
     # 根据传入的对象或者数组来构建一个用于集合的html_id
@@ -44,12 +54,22 @@ module PieUi
     def build_ul_id_part(ul_for_part)
       case ul_for_part
         when Class
-          ul_for_part.name.underscore.pluralize.gsub('/','_')
+          _class_html_id(ul_for_part)
         when ActiveRecord::Base
           dom_id(ul_for_part)
         when String, Symbol
           ul_for_part
+        else
+          _object_html_id(ul_for_part)
       end
+    end
+
+    def _object_html_id(object)
+      "#{_class_html_id(object.class)}_#{object.id}"
+    end
+
+    def _class_html_id(klass)
+      klass.name.underscore.pluralize.gsub('/','_')
     end
 
     # 产生随机字符串
@@ -104,5 +124,4 @@ module PieUi
     end
 
   end
-  
 end
