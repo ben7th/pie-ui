@@ -74,3 +74,5 @@ end
 
 require 'pie-ui/global_util'
 include GlobalUtil
+
+require 'pie-ui/classes/mplist_record'

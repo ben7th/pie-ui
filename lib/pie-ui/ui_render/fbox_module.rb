@@ -1,6 +1,5 @@
 module PieUi
   module FboxModule
-    include PieUi::MplistPartialMethods
     
     def fbox(operation,extra={},&block)
       if [:show,:close,:javascript].include?(operation)

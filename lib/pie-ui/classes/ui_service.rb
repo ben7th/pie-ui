@@ -1,26 +1,29 @@
-class UiService < ActiveResource::Base
-  PROJECT_CONFIG = YAML.load_file(Rails.root.join("config/project_config.yml"))[RAILS_ENV]
-  self.site = PROJECT_CONFIG["ui_url"]
+class UiService
 
   class << self
+
+    def site
+      CoreService.project('ui').url
+    end
+
     def css_files
       ['common','ui'].map{|x| css_path(x)}
     end
 
     def css_path(bundle_name)
-      "#{self.site}stylesheets/bundle_#{bundle_name}.css?#{randstr}"
+      pin_url_for 'ui',"stylesheets/bundle_#{bundle_name}.css?#{randstr}"
     end
 
     def theme_css_file
-      "#{self.site}stylesheets/themes/black.css?#{randstr}"
+      pin_url_for 'ui',"stylesheets/themes/black.css?#{randstr}"
     end
   end
 
   class << self
     def js_lib_files
       [
-        "#{self.site}javascripts/dev/prototype/protoaculous.1.8.3.min.js?#{randstr}",
-        "#{self.site}javascripts/dev/jquery/jquery-1.4.2.min.noconflict.js?#{randstr}"
+        pin_url_for('ui',"javascripts/dev/prototype/protoaculous.1.8.3.min.js?#{randstr}"),
+        pin_url_for('ui',"javascripts/dev/jquery/jquery-1.4.2.min.noconflict.js?#{randstr}")
       ]
     end
 
@@ -29,7 +32,8 @@ class UiService < ActiveResource::Base
     end
 
     def js_path(bundle_name)
-      "#{self.site}javascripts/bundle_#{bundle_name}.js?#{randstr}"
+      pin_url_for 'ui',"javascripts/bundle_#{bundle_name}.js?#{randstr}"
     end
   end
+
 end

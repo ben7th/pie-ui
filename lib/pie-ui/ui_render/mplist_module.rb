@@ -1,6 +1,5 @@
 module PieUi
   module MplistModule
-    include PieUi::MplistPartialMethods
 
     # mplist综合渲染器
     # 使用方法：
@@ -38,7 +37,8 @@ module PieUi
 
       %`
         $$(#{ul_pattern.to_json}).each(function(ul){
-          pie.mplist.insert_li(ul,#{str.to_json},#{prev_li_pattern.to_json});
+          var li_str = #{str.to_json};
+          pie.mplist.insert_li(ul,li_str,#{prev_li_pattern.to_json});
         });
       `
     end
@@ -83,10 +83,6 @@ module PieUi
 
     def _get_ul_pattern(selector)
       case selector
-        when ActiveRecord::Base
-          "#mplist_#{build_ul_id selector}"
-        when Array
-          "#mplist_#{build_ul_id selector}"
         when Hash
           selector[:ul]
         else
@@ -96,16 +92,14 @@ module PieUi
 
     def _get_li_pattern(selector)
       case selector
-        when ActiveRecord::Base
-          "##{dom_id selector}"
-        when Array
-          "##{dom_id selector.last}"
-        when Hash
-          selector[:li]
         when nil
           nil
-        else
-          "##{_object_html_id(selector)}"
+        when Hash
+          selector[:li]
+        when String # TOP 等
+          selector
+        when ActiveRecord::Base, Array, MplistRecord
+          "##{dom_id(last_item_of_objects(selector))}"
       end
     end
 
@@ -123,6 +117,12 @@ module PieUi
     end
 
     def _get_partial_str(prefix,model,extra)
+      model_locals = {get_sym_of(model)=>model}
+
+      extra ||= {}
+      extra[:locals] ||= {}
+      extra[:locals] = extra[:locals].merge(model_locals)
+
       if extra[:partial]
         _render_partial(extra)
       else

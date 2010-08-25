@@ -2,14 +2,18 @@ module PieUi
   module Convention
     include ActionController::RecordIdentifier
 
+    def last_item_of_objects(object_or_objects)
+      [object_or_objects].flatten(1).last
+    end
+    
     # plural_class_name 是 ActionController::RecordIdentifier 中的方法
     # 根据传入的对象或对象数组，获取目标对象名的可读字符串，用于mplist的classname
     def get_mplist_for_object_classname(object_or_objects)
       case object_or_objects
-      when nil
-        'unknown'
-      else
-        plural_class_name [object_or_objects].flatten(1).last
+        when nil
+          'unknown'
+        else
+          plural_class_name(last_item_of_objects(object_or_objects))
       end
     end
 
@@ -20,78 +24,40 @@ module PieUi
     #   传入: [<Book id=23>,Cooking::ApplePie]
     #     返回 book_23_cooking_apple_pies
     #
+    #   传入： [<Book id=23>,<Cooking::ApplePie id=19>]
+    #     返回 book_23_cooking_apple_pies
+    #
     #   传入: [:my,<Book id=23>,Cooking::ApplePie]
     #     返回 my_book_23_cooking_apple_pies
     #   
     # 如果是数组，组装每个部分并用 _ 连接
     def build_ul_id(ul_for)
       case ul_for
-        when ActiveRecord::Base
-          # ui.mplist 会用到这个情况
-          build_ul_id_part(ul_for.class)
-        when Class
-          # Apple
-          build_ul_id_part(ul_for)
+        when Class, ActiveRecord::Base, MplistRecord
+          plural_class_name(ul_for)
         when Array
-          # [<Apple id:33>, Foo::Bar]
-          _prepare_array(ul_for).map{|x| build_ul_id_part(x)}*'_'
+          _array_html_id(ul_for)
         else
-          build_ul_id_part(ul_for.class)
+          raise '传入 mplist 的对象不是 Class, ActiveRecord::Base 或 MplistRecord'
       end
     end
 
-    def _prepare_array(array)
-      arr1 = array.clone
-      if(!arr1.last.is_a? Class)
-        last = arr1.pop
-        arr1<<last.class
-      end
-      arr1
+    def _array_html_id(array)
+      tmp_arr = array.clone
+      last_item = tmp_arr.pop
+      part1 = tmp_arr.map{|x| dom_id(x)}*'_'
+      part2 = build_ul_id(last_item)
+      "#{part1}_#{part2}"
     end
-
-    # 根据传入的对象或者数组来构建一个用于集合的html_id
-    # 此函数用于构建每个部分
-    def build_ul_id_part(ul_for_part)
-      case ul_for_part
-        when Class
-          _class_html_id(ul_for_part)
-        when ActiveRecord::Base
-          dom_id(ul_for_part)
-        when String, Symbol
-          ul_for_part
-        else
-          _object_html_id(ul_for_part)
-      end
-    end
-
-    def _object_html_id(object)
-      "#{_class_html_id(object.class)}_#{object.id}"
-    end
-
-    def _class_html_id(klass)
-      klass.name.underscore.pluralize.gsub('/','_')
-    end
-
-    # 产生随机字符串
-    def randstr(length=8)
-      base = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      size = base.size
-      re = ''<<base[rand(size-10)]
-      (length-1).times  do
-        re<<base[rand(size)]
-      end
-      re
-    end
-    
   end
 
   module MplistPartialMethods
-    # 根据 ActiveRecord 模型 获取对应的模板基准名
+    # 根据 Record 获取对应的模板基准名
     def get_partial_base_name_of_model(model)
       underscore_class_name_of(model).demodulize
     end
 
-    # 根据 ActiveRecord 模型 获取带有目录信息的模板名
+    # 根据 Record 获取带有目录信息的模板名
     def get_partial_name_of_model(model)
       get_partial_name_of_model_with_prefix(:mpinfo,model)
     end

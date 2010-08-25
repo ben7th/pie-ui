@@ -1,8 +1,10 @@
 module PieUi
   module MplistHelper
+    include PieUi::Convention
+
     def mplist(collection=[],options={},&block)
       
-      config = PieUi::MplistConfig.new(options)
+      config = PieUi::MplistHelperConfig.new(options)
   
       concat("<ul id='#{config.html_dom_id}' class='#{config.classname}' data-selectable='#{config.selectable}'>")
       block_given? ? _mplist_block_given(collection,&block) : _mplist_no_block(collection,config)
@@ -13,11 +15,10 @@ module PieUi
       collection.each do |member|
         capture_str = capture(member, &block)
         case member
-          when ActiveRecord::Base
+          when ActiveRecord::Base, MplistRecord
             _active_record_li(member,capture_str)
           else
-#            _common_object_li(member,capture_str)
-            _active_record_li(member,capture_str)
+            raise '传入 mplist 构建器的对象不是 ActiveRecord::Base 或 MplistRecord'
         end
       end
     end
@@ -40,12 +41,6 @@ module PieUi
       })
     end
 
-#    def _common_object_li(member,capture_str)
-#      concat("<li id='#{_object_html_id member}' class='#{li_classname}'>")
-#      concat(_fix_capture_tail_format(capture_str))
-#      concat("</li>")
-#    end
-
     # 去掉末尾的 \n 的目的是为了输出代码的整齐
     def _fix_capture_tail_format(capture_str)
       capture_str.sub(/\n$/,'') 
@@ -55,10 +50,9 @@ module PieUi
       'mpli'
     end
 
-    include PieUi::Convention
   end
 
-  class MplistConfig
+  class MplistHelperConfig
     include PieUi::Convention
     include PieUi::MplistPartialMethods
 

@@ -1,5 +1,11 @@
 module PieUi
   class MindpinUiRender
+    include PieUi::Convention
+    include PieUi::MplistPartialMethods
+
+    include PieUi::FboxModule
+    include PieUi::MplistModule
+
     def initialize(context,page,&block)
       @page = page # rjs 的调用句柄
       @context = context # controller上下文实例
@@ -26,40 +32,6 @@ module PieUi
         ActionController::Routing::Routes.recognize_path(url,options)
       end
 
-    module MindpinUiRender::CellModule
-      def cell(*args)
-        model = args.first
-        options = args.extract_options!
-
-        options[:locals] ||= {}
-        options[:partial] ||= "#{get_path_of_controller}/cell_#{controller.action_name}"
-
-        _render_page(model,options)
-      end
-
-      private
-        def _render_page(model,options)
-          locals = case model
-            when Symbol
-              options[:locals]
-            when ActiveRecord::Base
-              {get_sym_of(model)=>model}.merge(options[:locals])
-            when Hash
-              options[:locals]
-            else
-              options[:locals]
-          end
-          position = context.params[:PL] || options[:position]
-
-          html_str = (render :partial=>options[:partial],:locals=>locals)
-          page<<"pie.cell.update_html(#{position.to_json},#{html_str.to_json})"
-        end
-    end
-
-    include PieUi::Convention
-    include PieUi::FboxModule
-    include PieUi::MplistModule
-    include CellModule
   end
 
 end
