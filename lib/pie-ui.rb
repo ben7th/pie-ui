@@ -10,6 +10,7 @@ module PieUi
       require 'pie-ui/convention'
 
       require 'pie-ui/helpers/mplist_helper'
+      require 'pie-ui/helpers/mplist_helper_config'
       ActionView::Base.send :include, MplistHelper
 
       require 'pie-ui/helpers/xml_format_helper'

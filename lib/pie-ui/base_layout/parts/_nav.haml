@@ -6,8 +6,5 @@
     - if logged_in?
       =render :partial=>base_layout_path('parts/user_nav_box.haml')
     - else
-      .start
-        %span.home>= link_to '首页','javascript:;'
-        %span>= link_to '<b class="font14">用户注册</b>','javascript:;'
-        %span>= link_to '登录','javascript:;'
+      =render :partial=>base_layout_path('parts/user_nav_box_not_logged_in.haml')
         

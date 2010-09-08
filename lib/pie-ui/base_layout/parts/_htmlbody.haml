@@ -1,12 +1,10 @@
-- yield_partial = @mindpin_layout.yield_partial
-
 %body.echo
 
   .page-warp
     .page-container
       =render :partial=>base_layout_path('parts/nav.haml') if !@mindpin_layout.hide_nav
       .page-content{:class=>container_classname}
-        = yield_partial.nil? ? yield : render(:partial=>base_layout_path("yield/#{yield_partial}.haml"))
+        =yield_partial_html
 
   = render :partial=>base_layout_path('parts/footer.haml') if !@mindpin_layout.hide_footer
 

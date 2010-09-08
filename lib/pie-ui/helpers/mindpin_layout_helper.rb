@@ -37,6 +37,27 @@ module PieUi
       return ''
     end
 
+    # layout内部修饰模板
+    def yield_partial_html
+      yield_partial = @mindpin_layout.yield_partial
+      return yield if yield_partial.nil?
+      begin
+        render(:partial=>base_layout_path("yield/#{yield_partial}.haml"))
+      rescue Exception => ex
+        render(:partial=>"/layouts/yield/#{yield_partial}")
+      end
+
+    end
+
+    def render_actions
+      actions_path = controller.class.name.downcase.sub('::','/').sub('controller','/actions')
+      begin
+        render :partial=>actions_path
+      rescue
+        ''
+      end
+    end
+
     def render_tabs
       tabs_path = controller.class.name.downcase.sub('::','/').sub('controller','/tabs')
       begin

@@ -31,7 +31,7 @@ module PieUi
 
       prev_li_pattern = _get_li_pattern(extra[:prev])
 
-      str = context.content_tag_for :li, model, :class=>'mli' do
+      str = context.content_tag_for :li, model, :class=>'mpli' do
         _get_partial_str(:mpinfo, model, extra)
       end
 
@@ -70,7 +70,7 @@ module PieUi
       prev_model = extra[:prev]
       prev_model_html_id = prev_model.nil? ? nil : (dom_id prev_model)
 
-      str = context.content_tag_for :li,model,:class=>'mli' do
+      str = context.content_tag_for :li,model,:class=>'mpli' do
         _get_partial_str(:form,model,extra)
       end
 
