@@ -25,6 +25,12 @@ module PieUi
       require 'pie-ui/helpers/logo_helper'
       ActionView::Base.send :include, LogoHelper
 
+      require 'pie-ui/helpers/html_dom_helper'
+      ActionView::Base.send :include, HtmlDomHelper
+
+      require 'pie-ui/helpers/datetime_helper'
+      ActionView::Base.send :include, DatetimeHelper
+
       ActionController::Base.send :include, MindpinLayout::ControllerFilter
     end
 

@@ -49,6 +49,23 @@ module PieUi
 
     end
 
+    def render_nav
+      if logged_in?
+        begin
+          render :partial=>'/layouts/user_nav_box'
+        rescue Exception => ex
+          render :partial=>base_layout_path('parts/user_nav_box.haml')
+        end
+        return
+      end
+
+      begin
+        render :partial=>'/layouts/user_nav_box_not_logged_in'
+      rescue Exception => ex
+        render :partial=>base_layout_path('parts/user_nav_box_not_logged_in.haml')
+      end
+    end
+
     def render_actions
       actions_path = controller.class.name.downcase.sub('::','/').sub('controller','/actions')
       begin
