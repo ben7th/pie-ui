@@ -33,8 +33,8 @@ module PieUi
     def _call_show_fbox(string)
       json = string.to_json
       %~
-        jQuery.facebox.settings.closeImage = '#{UiService.site}images/plugins/facebox/closelabel.gif';
-        jQuery.facebox.settings.loadingImage = '#{UiService.site}images/plugins/facebox/loading.gif';
+        jQuery.facebox.settings.closeImage = '#{File.join UiService.site,'images/plugins/facebox/closelabel.gif'}';
+        jQuery.facebox.settings.loadingImage = '#{File.join UiService.site,'images/plugins/facebox/closelabel.gif'}';
 
         //当fbox现在是显示状态时，再show的话，不重新loading
         if(jQuery('#facebox').length == 0 || jQuery('#facebox').css('display')=='none'){
