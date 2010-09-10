@@ -11,19 +11,19 @@ class UiService
     end
 
     def css_path(bundle_name)
-      "#{site}stylesheets/bundle_#{bundle_name}.css?#{randstr}"
+      File.join site,"stylesheets/bundle_#{bundle_name}.css?#{randstr}"
     end
 
     def theme_css_file
-      "#{site}stylesheets/themes/black.css?#{randstr}"
+      File.join site,"stylesheets/themes/black.css?#{randstr}"
     end
   end
 
   class << self
     def js_lib_files
       [
-        "#{site}javascripts/dev/prototype/protoaculous.1.8.3.min.js?#{randstr}",
-        "#{site}javascripts/dev/jquery/jquery-1.4.2.min.noconflict.js?#{randstr}"
+        File.join(site,"javascripts/dev/prototype/protoaculous.1.8.3.min.js?#{randstr}"),
+        File.join(site,"javascripts/dev/jquery/jquery-1.4.2.min.noconflict.js?#{randstr}")
       ]
     end
 
@@ -32,7 +32,7 @@ class UiService
     end
 
     def js_path(bundle_name)
-      pin_url_for 'ui',"javascripts/bundle_#{bundle_name}.js?#{randstr}"
+      File.join site,"javascripts/bundle_#{bundle_name}.js?#{randstr}"
     end
   end
 
