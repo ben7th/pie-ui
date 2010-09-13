@@ -52,6 +52,9 @@ module PieUi
   end
 end
 
+require 'rubygems'
+require 'grit'
+
 if defined? Rails
   def base_layout_path(filename)
     "#{File.dirname(__FILE__)}/pie-ui/base_layout/#{filename}"
