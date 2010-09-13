@@ -2,8 +2,26 @@ class UiService
 
   class << self
 
+    def asset_id
+      # 获取用于区分静态文件缓存的asset_id
+      # 暂时先硬编码实现，如果将来需要分布在不同的服务器上，再对这个方法进行修改
+      case RAILS_ENV
+      when 'development'
+        randstr #开发环境的话 不去缓存
+      when 'production'
+        last_modified_file_id('/web/2010/pin-v4-web-ui/')
+      end
+    end
+
+    def last_modified_file_id(project_dir)
+      repo = Grit::Repo.new(project_dir)
+      js  = repo.log('master', 'public/javascripts', :max_count => 1).first
+      css = repo.log('master', 'public/stylesheets', :max_count => 1).first
+      js.committed_date > css.committed_date ? js.id : css.id
+    end
+
     def site
-      CoreService.project('ui').url
+      pin_url_for('ui')
     end
 
     def css_files
@@ -11,19 +29,19 @@ class UiService
     end
 
     def css_path(bundle_name)
-      File.join site,"stylesheets/bundle_#{bundle_name}.css?#{randstr}"
+      File.join site,"stylesheets/bundle_#{bundle_name}.css?#{asset_id}"
     end
 
     def theme_css_file
-      File.join site,"stylesheets/themes/black.css?#{randstr}"
+      File.join site,"stylesheets/themes/black.css?#{asset_id}"
     end
   end
 
   class << self
     def js_lib_files
       [
-        File.join(site,"javascripts/dev/prototype/protoaculous.1.8.3.min.js?#{randstr}"),
-        File.join(site,"javascripts/dev/jquery/jquery-1.4.2.min.noconflict.js?#{randstr}")
+        File.join(site,"javascripts/dev/prototype/protoaculous.1.8.3.min.js?#{asset_id}"),
+        File.join(site,"javascripts/dev/jquery/jquery-1.4.2.min.noconflict.js?#{asset_id}")
       ]
     end
 
@@ -32,7 +50,7 @@ class UiService
     end
 
     def js_path(bundle_name)
-      File.join site,"javascripts/bundle_#{bundle_name}.js?#{randstr}"
+      File.join site,"javascripts/bundle_#{bundle_name}.js?#{asset_id}"
     end
   end
 
