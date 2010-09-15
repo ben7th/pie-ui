@@ -22,5 +22,19 @@ module PieUi
       end
     end
 
+    def avatar(user_or_email, style=nil)
+      case user_or_email
+      when User
+        logo(user_or_email,style)
+      when String
+        avatar_by_email(user_or_email,style)
+      end
+    end
+
+    def avatar_by_email(email, style)
+      user = User.find_by_email(email)
+      logo(user,style)
+    end
+
   end
 end
