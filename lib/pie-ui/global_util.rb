@@ -8,4 +8,8 @@ module GlobalUtil
     end
     re
   end
+
+  def text_num(text, num)
+    num == 0 ? "#{text}" : "#{text}(#{num})"
+  end
 end

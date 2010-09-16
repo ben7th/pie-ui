@@ -31,6 +31,15 @@ module PieUi
       require 'pie-ui/helpers/datetime_helper'
       ActionView::Base.send :include, DatetimeHelper
 
+      require 'pie-ui/helpers/login_fbox_helper'
+      ActionView::Base.send :include, LoginFboxHelper
+
+      require 'pie-ui/helpers/link_helper'
+      ActionView::Base.send :include, LinkHelper
+
+      require 'pie-ui/helpers/dom_util_helper'
+      ActionView::Base.send :include, DomUtilHelper
+
       ActionController::Base.send :include, MindpinLayout::ControllerFilter
     end
 
