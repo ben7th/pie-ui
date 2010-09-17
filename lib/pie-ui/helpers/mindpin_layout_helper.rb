@@ -2,19 +2,19 @@ module PieUi
   module MindpinLayoutHelper
     # 用于其他子工程，引用公共ui
     def require_ui_css
-      ''#stylesheet_link_tag UiService.css_files
+      stylesheet_link_tag UiService.css_files
     end
 
     def require_theme_css
-      ''#stylesheet_link_tag UiService.theme_css_file
+      stylesheet_link_tag UiService.theme_css_file
     end
 
     def require_lib_js
-      ''#javascript_include_tag UiService.js_lib_files
+      javascript_include_tag UiService.js_lib_files
     end
 
     def require_mindpin_js
-      ''#javascript_include_tag UiService.js_files
+      javascript_include_tag UiService.js_files
     end
 
 
