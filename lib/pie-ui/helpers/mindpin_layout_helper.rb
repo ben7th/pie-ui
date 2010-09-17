@@ -10,11 +10,11 @@ module PieUi
     end
 
     def require_lib_js
-      javascript_include_tag UiService.js_lib_files
+      ''#javascript_include_tag UiService.js_lib_files
     end
 
     def require_mindpin_js
-      javascript_include_tag UiService.js_files
+      ''#javascript_include_tag UiService.js_files
     end
 
 
