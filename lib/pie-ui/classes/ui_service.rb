@@ -13,6 +13,10 @@ class UiService
       end
     end
 
+    def env_asset_id
+      ENV['RAILS_ASSET_ID']
+    end
+
     def last_modified_file_id(project_dir)
       t1 = Time.now
       repo = Grit::Repo.new(project_dir)
@@ -32,19 +36,19 @@ class UiService
     end
 
     def css_path(bundle_name)
-      File.join site,"stylesheets/bundle_#{bundle_name}.css?#{asset_id}"
+      File.join site,"stylesheets/bundle_#{bundle_name}.css?#{env_asset_id}"
     end
 
     def theme_css_file
-      File.join site,"stylesheets/themes/black.css?#{asset_id}"
+      File.join site,"stylesheets/themes/black.css?#{env_asset_id}"
     end
   end
 
   class << self
     def js_lib_files
       [
-        File.join(site,"javascripts/dev/prototype/protoaculous.1.8.3.min.js?#{asset_id}"),
-        File.join(site,"javascripts/dev/jquery/jquery-1.4.2.min.noconflict.js?#{asset_id}")
+        File.join(site,"javascripts/dev/prototype/protoaculous.1.8.3.min.js?#{env_asset_id}"),
+        File.join(site,"javascripts/dev/jquery/jquery-1.4.2.min.noconflict.js?#{env_asset_id}")
       ]
     end
 
@@ -53,7 +57,7 @@ class UiService
     end
 
     def js_path(bundle_name)
-      File.join site,"javascripts/bundle_#{bundle_name}.js?#{asset_id}"
+      File.join site,"javascripts/bundle_#{bundle_name}.js?#{env_asset_id}"
     end
   end
 
