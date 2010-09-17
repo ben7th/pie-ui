@@ -5,6 +5,7 @@ class MindpinLayout
   attr_accessor :hide_nav, :hide_footer
   attr_accessor :head_class
   attr_accessor :put_js_in_head
+  attr_accessor :welcome_string
 
   module ControllerFilter
     def self.included(base)   

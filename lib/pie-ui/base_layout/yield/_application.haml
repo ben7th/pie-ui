@@ -1,9 +1,9 @@
 .cell.clearfix
   .cellhead
     .avatared
-      =guest_logo
+      =avatar(current_user,:tiny)
       .hello
-        你好！${自定义字符串}
+        你好！#{welcome_string}
     .actions
       = render_actions
     .tabs

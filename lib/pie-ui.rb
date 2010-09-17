@@ -40,6 +40,9 @@ module PieUi
       require 'pie-ui/helpers/dom_util_helper'
       ActionView::Base.send :include, DomUtilHelper
 
+      require 'pie-ui/helpers/button_helper'
+      ActionView::Base.send :include, ButtonHelper
+
       ActionController::Base.send :include, MindpinLayout::ControllerFilter
     end
 

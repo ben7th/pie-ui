@@ -28,6 +28,8 @@ module PieUi
         logo(user_or_email,style)
       when String
         avatar_by_email(user_or_email,style)
+      else
+        guest_logo
       end
     end
 

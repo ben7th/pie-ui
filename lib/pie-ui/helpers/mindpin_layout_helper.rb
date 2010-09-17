@@ -89,6 +89,12 @@ module PieUi
       link_to(name, options, html_options, &block)
     end
 
+    def welcome_string
+      if logged_in?
+        @mindpin_layout.welcome_string || @welcome_string || current_user.name
+      end
+    end
+
   #  # 获取当前页面显示主题字符串，如果没有默认是 'sapphire'
   #  def get_user_theme_str
   #    if @mindpin_layout.theme.blank?
