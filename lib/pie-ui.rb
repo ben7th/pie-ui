@@ -97,6 +97,8 @@ end
 require 'pie-ui/global_util'
 include GlobalUtil
 
+require 'pie-ui/string_util'
+
 require 'pie-ui/classes/mplist_record'
 
 ENV['RAILS_ASSET_ID'] = UiService.asset_id
