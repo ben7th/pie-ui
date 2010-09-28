@@ -9,6 +9,9 @@
     .sp=link_to "收件箱",'javascript:;',:'original-title'=>'处理站内消息，<span class="loud">正在开发中..</span>'
     .sp=link_to "用户设置",pin_url_for('user_auth','/account'),:'original-title'=>'设置头像，昵称'
     .sp=link_to "退出",pin_url_for('user_auth','/logout'),:'original-title'=>'点这里退出登录'
-    
 
-  
+.topbar
+  %ul
+    %li=link_to '工作空间',pin_url_for("pin-workspace","/")
+    %li=link_to '分享',pin_url_for("pin-share","/")
+    %li=link_to '应用',pin_url_for("pin-app-adapter","apps")
