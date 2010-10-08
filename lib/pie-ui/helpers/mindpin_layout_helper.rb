@@ -40,7 +40,11 @@ module PieUi
     # layout内部修饰模板
     def yield_partial_html
       yield_partial = @mindpin_layout.yield_partial
-      return yield if yield_partial.nil?
+      
+      if yield_partial.nil?
+        return render(:partial=>base_layout_path("yield/yield_only.haml"))
+      end
+
       begin
         render(:partial=>base_layout_path("yield/#{yield_partial}.haml"))
       rescue Exception => ex
