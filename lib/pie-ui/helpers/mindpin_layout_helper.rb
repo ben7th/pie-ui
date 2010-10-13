@@ -47,7 +47,7 @@ module PieUi
 
       begin
         render(:partial=>base_layout_path("yield/#{yield_partial}.haml"))
-      rescue Exception => ex
+      rescue ActionView::MissingTemplate => ex
         render(:partial=>"/layouts/yield/#{yield_partial}")
       end
 
